@@ -1,0 +1,30 @@
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "tyk-operator-helm.fullname" . }}-serving-cert
+  name: {{ include "tyk-operator-helm.fullname" . }}-validating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    caBundle: Cg==
+    service:
+      name: {{ include "tyk-operator-helm.fullname" . }}-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /validate-tyk-tyk-io-v1alpha1-apidefinition
+  failurePolicy: Fail
+  name: vapidefinition.kb.io
+  rules:
+  - apiGroups:
+    - tyk.tyk.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - apidefinitions
+  sideEffects: None
