@@ -61,27 +61,9 @@ spec:
         - --enable-leader-election
         command:
         - /manager
-        env:
-        - name: TYK_URL
-          valueFrom:
-            secretKeyRef:
-              key: tykURL
-              name: tyk-operator-conf
-        - name: TYK_AUTH
-          valueFrom:
-            secretKeyRef:
-              key: tykAuth
-              name: tyk-operator-conf
-        - name: TYK_ORG
-          valueFrom:
-            secretKeyRef:
-              key: tykOrg
-              name: tyk-operator-conf
-        - name: TYK_MODE
-          valueFrom:
-            secretKeyRef:
-              key: tykMode
-              name: tyk-operator-conf
+        envFrom:
+          - secretRef:
+              name: {{ .Values.confSecretName }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
