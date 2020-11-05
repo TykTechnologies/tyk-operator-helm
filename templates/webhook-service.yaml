@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     {{- include "tyk-operator-helm.labels" . | nindent 4 }}
-  name: {{ include "tyk-operator-helm.fullname" . }}-controller-manager-metrics-service
+  name: {{ include "tyk-operator-helm.fullname" . }}-controller-manager-webhook-service
 spec:
   ports:
   - name: https
